@@ -3,13 +3,15 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     UsersModule,
-    MongooseModule.forRoot(
-      'mongodb+srv://adireto:bagU55XVZBFVNOFL@clusterad.eiyeg.gcp.mongodb.net/dbadireto?retryWrites=true&w=majority',
-    ),
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+    }),
+    MongooseModule.forRoot(process.env.MONGO_URL),
   ],
   controllers: [AppController],
   providers: [AppService],
