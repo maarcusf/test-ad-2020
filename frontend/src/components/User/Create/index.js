@@ -6,10 +6,11 @@ import history from "../../../services/history";
 import { Link } from "react-router-dom";
 
 import { toast } from "react-toastify";
+import adireto from "./../../../assets/logoadireto.png";
 
 import { Button, ListGroup } from "react-bootstrap";
 
-import { Container, Content } from "./styles";
+import { Container, Content, Logomarca } from "./styles";
 import Axios from "axios";
 
 const schema = Yup.object().shape({
@@ -27,18 +28,17 @@ function Create() {
                 email,
             });
 
-            toast.success("Participante criado com sucesso");
+            toast.success("Participante Criado com Sucesso!!!");
             history.push("/");
         } catch (error) {
-            toast.error(
-                "Erro ao criar o participante, tente novamente mais tarde"
-            );
+            toast.error("Houve um erro tentar criar um novo participante!");
         }
     }
     return (
         <Container>
             <Content>
-                <h2>Cadastrar novo participante</h2>
+                <Logomarca src={adireto} />
+                <h2>Cadastrar Participante</h2>
                 <Form
                     schema={schema}
                     onSubmit={handleSubmit}

@@ -8,8 +8,9 @@ import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
 import { toast } from "react-toastify";
+import adireto from "./../../../assets/logoadireto.png";
 
-import { Container, Content } from "./styles";
+import { Container, Content, Logomarca } from "./styles";
 
 const schema = Yup.object().shape({
     name: Yup.string().required("O nome é obrigatório"),
@@ -50,7 +51,8 @@ function Edit({ match }) {
     return (
         <Container>
             <Content>
-                <h2>Editar participante</h2>
+                <Logomarca src={adireto} />
+                <h2>Editar Participante</h2>
                 <Form
                     initialData={user}
                     schema={schema}

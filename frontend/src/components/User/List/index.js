@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import api from "../../../services/api";
-import { MdModeEdit, MdDelete, MdCardGiftcard } from "react-icons/md";
+import { MdModeEdit, MdDelete, MdRemoveRedEye } from "react-icons/md";
 import { toast } from "react-toastify";
+import adireto from "./../../../assets/logoadireto.png";
 
 import { Button, ListGroup, Modal, Spinner } from "react-bootstrap";
 
 import {
+    Logomarca,
     Container,
     Content,
     ListParticipants,
@@ -17,7 +19,7 @@ import {
 
 function Users() {
     const [users, setUsers] = useState([]);
-    const [friend, setFriend] = useState("");
+    const [secretFriend, setFriend] = useState("");
     const [smShow, setSmShow] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -65,15 +67,13 @@ function Users() {
     }
 
     async function handleShowFriend(friend) {
-        const confirm = window.confirm("Tem certeza que deseja espiar?");
-        if (confirm) {
-            setFriend(friend);
-            setSmShow(true);
-        }
+        setFriend(friend);
+        setSmShow(true);
     }
     return (
         <Container>
             <Content>
+                <Logomarca src={adireto} />
                 <h1>Amigo Secreto</h1>
                 {users.length === 0 && <p>Nenhum participante cadastrado.</p>}
                 <ListParticipants>
@@ -96,13 +96,15 @@ function Users() {
                                             title="Deletar"
                                         />
                                     </button>
-                                    {user.friend && (
+                                    {user.secretFriend && (
                                         <button
                                             onClick={() =>
-                                                handleShowFriend(user.friend)
+                                                handleShowFriend(
+                                                    user.secretFriend
+                                                )
                                             }
                                         >
-                                            <MdCardGiftcard title="Visualizar amigo sorteado" />
+                                            <MdRemoveRedEye title="Visualizar Amigo Secreto Sorteado" />
                                         </button>
                                     )}
                                 </UserActions>
@@ -112,11 +114,13 @@ function Users() {
                 </ListParticipants>
                 <div className="actions">
                     <Link to="/create">
-                        <Button variant="primary">Novo participante</Button>
+                        <Button variant="primary">
+                            Adicionar Participante
+                        </Button>
                     </Link>
                     {users.length > 2 && (
-                        <Button variant="primary" onClick={handleSorted}>
-                            Realizar Sorteio
+                        <Button variant="success" onClick={handleSorted}>
+                            Sortear Amigo Secreto
                         </Button>
                     )}
                 </div>
@@ -139,7 +143,7 @@ function Users() {
                         Amigo sorteado
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>{friend}</Modal.Body>
+                <Modal.Body>{secretFriend}</Modal.Body>
             </Modal>
         </Container>
     );
