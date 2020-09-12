@@ -13,16 +13,14 @@ export class UsersService {
     } catch (error) {
       throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
     }
-    
   }
 
   async getById(id: string) {
     try {
-      return await this.userModel.findById(id).exec();  
+      return await this.userModel.findById(id).exec();
     } catch (error) {
       throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     }
-    
   }
 
   async getByEmail(email: string) {
@@ -30,7 +28,7 @@ export class UsersService {
       return await this.userModel.findOne({ email }).exec();
     } catch (error) {
       throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
-    }    
+    }
   }
 
   async create(user: User) {
@@ -39,7 +37,7 @@ export class UsersService {
       return await createdUser.save();
     } catch (error) {
       throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
-    }    
+    }
   }
 
   async update(id: string, user: User) {
@@ -48,14 +46,27 @@ export class UsersService {
       return this.getById(id);
     } catch (error) {
       throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
-    }    
+    }
+  }
+
+  async addSecretFriend(email: string, secretFriend: string) {
+    try {
+      console.log(email);
+      console.log(secretFriend);
+      await this.userModel
+        .updateMany({ email: email }, { secretFriend: secretFriend })
+        .exec();
+      return this.getByEmail(email);
+    } catch (error) {
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
   }
 
   async delete(id: string) {
     try {
-        return await this.userModel.deleteOne({ _id: id }).exec();  
+      return await this.userModel.deleteOne({ _id: id }).exec();
     } catch (error) {
-        throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
-    }    
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
   }
 }
