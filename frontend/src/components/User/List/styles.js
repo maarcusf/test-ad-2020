@@ -1,20 +1,19 @@
 import styled from "styled-components";
+import background from "./../../../assets/imagemfundo.jpg";
+import adireto from "./../../../assets/logoadireto.png";
 
 export const Container = styled.div`
     width: 100%;
     min-height: 100vh;
+    background-image: url(${background});
 `;
 
 export const Content = styled.div`
     width: 500px;
     margin: 20px auto;
+
     h1 {
         text-align: center;
-    }
-    p {
-        font-size: 14px;
-        margin-top: 20px;
-        color: red;
     }
     .actions {
         display: flex;

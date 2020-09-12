@@ -16,48 +16,8 @@ import { exception } from 'console';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @Get()
-  async getAll(): Promise<User[]> {
-    return this.usersService.getAll();
-  }
-
-  @Get(':id')
-  async getById(@Param('id') id: string): Promise<User> {
-    return this.usersService.getById(id);
-  }
-
-  @Post()
-  async create(@Body() user: User): Promise<User> {
-    return this.usersService.create(user);
-  }
-
-  @Put(':id')
-  async update(@Param('id') id: string, @Body() user: User): Promise<User> {
-    return this.usersService.update(id, user);
-  }
-
-  @Delete(':id')
-  async delete(@Param('id') id: string) {
-    this.usersService.delete(id);
-  }
-
-  //Lógica do sorteio
-  sort(array) {
-    let index_current = array.length;
-    let value_temp = null;
-    let index_random = null;
-    const index_aux = 0;
-    while (index_aux !== index_current) {
-      index_random = Math.floor(Math.random() * index_current);
-      index_current -= 1;
-      value_temp = array[index_current];
-      array[index_current] = array[index_random];
-      array[index_random] = value_temp;
-    }
-    return array;
-  }
-
   //Função para realizar o sorteio
+  @Get('draw')
   async draw() {
     const users = await this.getAll();
     //verificar se há participantes suficientes para ter amigo secreto (no mínimo 3)
@@ -103,5 +63,46 @@ export class UsersController {
         if (retSql) sendEmail(user.email, user.secretFriend);
       }),
     );
+  }
+
+  @Get()
+  async getAll(): Promise<User[]> {
+    return this.usersService.getAll();
+  }
+
+  @Get(':id')
+  async getById(@Param('id') id: string): Promise<User> {
+    return this.usersService.getById(id);
+  }
+
+  @Post()
+  async create(@Body() user: User): Promise<User> {
+    return this.usersService.create(user);
+  }
+
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() user: User): Promise<User> {
+    return this.usersService.update(id, user);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    this.usersService.delete(id);
+  }
+
+  //Lógica do sorteio
+  sort(array) {
+    let index_current = array.length;
+    let value_temp = null;
+    let index_random = null;
+    const index_aux = 0;
+    while (index_aux !== index_current) {
+      index_random = Math.floor(Math.random() * index_current);
+      index_current -= 1;
+      value_temp = array[index_current];
+      array[index_current] = array[index_random];
+      array[index_random] = value_temp;
+    }
+    return array;
   }
 }

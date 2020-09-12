@@ -21,9 +21,10 @@ function Users() {
     const [smShow, setSmShow] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    //const usersController = new UsersController();
+
     async function loadUsers() {
-        const response = await api.get("/users");
-        console.log(response.data.length);
+        const response = await api.get("users");
         setUsers(response.data);
     }
 
@@ -34,7 +35,8 @@ function Users() {
     async function handleSorted() {
         setLoading(true);
         try {
-            await api.get("/draw");
+            //chamar função do controller aqui
+            await api.get("users/draw");
             toast.success("Emails enviados para os participantes sorteados");
             loadUsers();
         } catch (error) {
@@ -69,15 +71,10 @@ function Users() {
             setSmShow(true);
         }
     }
-    console.log(users);
     return (
         <Container>
             <Content>
-                <h1>Lista de Participantes</h1>
-                <p>
-                    Obs: Para realizar o sorteio deve ter pelo menos 3
-                    participantes cadastrados.
-                </p>
+                <h1>Amigo Secreto</h1>
                 {users.length === 0 && <p>Nenhum participante cadastrado.</p>}
                 <ListParticipants>
                     <ListGroup>
