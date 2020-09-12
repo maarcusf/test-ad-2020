@@ -8,11 +8,9 @@ import {
   Post,
   Put,
   Delete,
-  HttpException,
-  HttpStatus,
 } from '@nestjs/common';
-import { async } from 'rxjs';
-import { json } from 'express';
+import { sendEmail } from 'src/utils/sendEmail';
+import { exception } from 'console';
 
 @Controller('users')
 export class UsersController {
@@ -20,11 +18,6 @@ export class UsersController {
 
   @Get()
   async getAll(): Promise<User[]> {
-    //console.log('Função Draw: ' + this.draw());
-    // const array = await this.usersService.getAll();
-    // const retorno = await this.sort(array);
-    // console.log('Retorno da função: ' + retorno);
-    //this.draw();
     return this.usersService.getAll();
   }
 
@@ -66,15 +59,13 @@ export class UsersController {
 
   //Função para realizar o sorteio
   async draw() {
-    const users = await this.usersService.getAll();
-    console.log('Há ' + users.length + ' participantes');
+    const users = await this.getAll();
     //verificar se há participantes suficientes para ter amigo secreto (no mínimo 3)
     if (users.length < 3) {
-      console.log('Necessário ao menos 3 participantes cadastrados');
+      throw new exception('Necessário ao menos 3 participantes cadastrados');
     }
 
     //montando objeto com o resultado da consulta
-    console.log('Montando objeto com o resultado da consulta!');
     const allFriendsSecrets = users.map(user => {
       return {
         name: user.name,
@@ -83,25 +74,16 @@ export class UsersController {
       };
     });
 
-    console.log('Tamanho array montado: ' + allFriendsSecrets.length);
-    console.log('Realizando lógica do sorteio');
     const drawnUsers = this.sort(allFriendsSecrets);
     const allUsers = [];
 
-    console.log('Adicionando o primeiro amigo secreto para o último do array.');
     allUsers.push({
       name: drawnUsers[Object.keys(drawnUsers).length - 1].name,
       email: drawnUsers[Object.keys(drawnUsers).length - 1].email,
       secretFriend: drawnUsers[0].name,
     });
 
-    console.log(
-      'Adicionando o próximo amigo para o primeiro do array até o tamanho do array -1.',
-    );
     for (let i = 0; i < Object.keys(drawnUsers).length - 1; i++) {
-      console.log(
-        'Dentro do For - "Tamanho":' + (Object.keys(drawnUsers).length - 1),
-      );
       console.log(drawnUsers[i].name);
       console.log(drawnUsers[i].email);
       console.log(drawnUsers[i + 1].name);
@@ -112,19 +94,14 @@ export class UsersController {
       });
     }
 
-    console.log('Fazendo Update no campo secretFriend!');
-    const usersUpdated = await Promise.all(
+    await Promise.all(
       allUsers.map(async user => {
-        return await this.usersService.addSecretFriend(
+        const retSql = await this.usersService.addSecretFriend(
           user.email,
           user.secretFriend,
         );
+        if (retSql) sendEmail(user.email, user.secretFriend);
       }),
     );
-    console.log('Após update:');
-    console.log(usersUpdated);
-    //FAZER ENVIO DE E-MAIL AQUI
-    //
-    //
   }
 }

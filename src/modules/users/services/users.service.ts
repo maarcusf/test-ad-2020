@@ -51,8 +51,6 @@ export class UsersService {
 
   async addSecretFriend(email: string, secretFriend: string) {
     try {
-      console.log(email);
-      console.log(secretFriend);
       await this.userModel
         .updateMany({ email: email }, { secretFriend: secretFriend })
         .exec();
