@@ -8,10 +8,9 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import adireto from "./../../../assets/logoadireto.png";
 
-import { Button, ListGroup } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 import { Container, Content, Logomarca } from "./styles";
-import Axios from "axios";
 
 const schema = Yup.object().shape({
     name: Yup.string().required("O nome é obrigatório"),

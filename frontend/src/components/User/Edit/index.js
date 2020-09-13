@@ -23,18 +23,18 @@ function Edit({ match }) {
     const [user, setUser] = useState([]);
     const { id } = match.params;
 
-    async function loadUser() {
-        try {
-            const response = await api.get(`/users/${id}`);
-            setUser(response.data);
-        } catch (error) {
-            toast.error("Erro ao buscar o usuário");
-        }
-    }
-
     useEffect(() => {
+        async function loadUser() {
+            try {
+                const response = await api.get(`/users/${id}`);
+                setUser(response.data);
+            } catch (error) {
+                toast.error("Erro ao buscar o usuário");
+            }
+        }
+
         loadUser();
-    }, []);
+    }, [id]);
 
     async function handleSubmit({ name, email }) {
         try {

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import background from "./../../../assets/imagemfundo.jpg";
-import adireto from "./../../../assets/logoadireto.png";
 
 export const Logomarca = styled.img`
     width: 142;
