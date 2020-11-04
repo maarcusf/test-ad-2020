@@ -1,22 +1,35 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import * as request from 'supertest';
+import { Test } from '@nestjs/testing';
+import { UsersModule } from './modules/users/users.module';
+import { UsersService } from './modules/users/services/users.service';
+import { INestApplication } from '@nestjs/common';
 
-describe('AppController', () => {
-  let appController: AppController;
+describe('Users', () => {
+  let app: INestApplication;
+  let usersService = { findAll: () => ['test'] };
 
-  beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
-      controllers: [AppController],
-      providers: [AppService],
-    }).compile();
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      imports: [UsersModule],
+    })
+      .overrideProvider(UsersService)
+      .useValue(usersService)
+      .compile();
 
-    appController = app.get<AppController>(AppController);
+    app = moduleRef.createNestApplication();
+    await app.init();
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
-    });
+  it(`/GET users`, () => {
+    return request(app.getHttpServer())
+      .get('/')
+      .expect(200)
+      .expect({
+        data: usersService.findAll(),
+      });
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 });

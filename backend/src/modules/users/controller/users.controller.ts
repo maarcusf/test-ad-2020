@@ -9,7 +9,7 @@ import {
   Put,
   Delete,
 } from '@nestjs/common';
-import { sendEmail } from 'src/utils/sendEmail';
+import { sendEmail } from '../../../../src/utils/sendEmail';
 import { exception } from 'console';
 
 @Controller('users')
